@@ -103,7 +103,7 @@ programs.waybar = {
     "wireplumber"= {
         "format"= "{icon} {volume}% ";
         "format-muted"= "";
-        "on-click"= "helvum";
+        "on-click"= "pavucontrol";
         "format-icons"= ["" "" ""];
     };
     "mpris"= {
@@ -127,7 +127,7 @@ programs.waybar = {
 	border: none;
 	border-radius: 10px;
         font-family: "Noto Sans Mono CJK SC, Font Awesome 6 Free";
-	font-size: 14px;
+	font-size: 15px;
 	min-height: 10px;
   }
 

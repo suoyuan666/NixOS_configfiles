@@ -8,9 +8,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprlock.url = "github:hyprwm/hyprlock";
   };
 
-  outputs = { nixpkgs, home-manager, hyprland, ... }@inputs: {
+  outputs = { nixpkgs, home-manager, hyprland, hyprlock, ... }@inputs: {
     nixosConfigurations = {
       OpenOS = nixpkgs.lib.nixosSystem{
       system = "x86_64-linux";
@@ -21,8 +22,16 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.users.zuos = {
+	        imports = [
+	          ./home/home.nix
+		  hyprlock.homeManagerModules.hyprlock
+	        ];
+	    };
 
-            home-manager.users.zuos = import ./home/home.nix;
+            # 使用 home-manager.extraSpecialArgs 自定义传递给 ./home.nix 的参数
+            # 取消注释下面这一行，就可以在 home.nix 中使用 flake 的所有 inputs 参数了
+            # home-manager.extraSpecialArgs = inputs;
           }
       ];
       };

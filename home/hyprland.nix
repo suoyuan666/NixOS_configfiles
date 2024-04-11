@@ -11,6 +11,9 @@
       XDG_CURRENT_DESKTOP = "Hyprland";
       XDG_SESSION_DESKTOP = "Hyprland";
       XDG_SESSION_TYPE = "wayland";
+      #GBM_BACKEND = "nvidia-drm";
+      #__GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      #WLR_NO_HARDWARE_CURSORS = 1;
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       SDL_IM_MODULE = "fcitx";
@@ -19,7 +22,9 @@
     };
   };
 
-  wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland = {
+    enable = true;
+  };
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     "$terminal" = "kitty";
@@ -30,6 +35,7 @@
       "waybar"
       "mako"
       "fcitx5 -d"
+      "blueman-applet"
       "swaybg -i \"/home/zuos/Pictures/landscape-rocks-6016x6016-11016.jpg\" -m fill"
     ];
     gestures = {
@@ -91,6 +97,22 @@
         "workspaces, 1, 6, default"
       ];
     };
+    windowrule = let
+        f = regex: "float, ^(${regex})$";
+      in [
+		(f "nm-connection-editor")
+		(f "pavucontrol")
+		(f "org.pipewire.Helvum")
+		(f "xdg-desktop-portal")
+		(f "xdg-desktop-portal-wlr")
+		(f "Bitwarden")
+		(f "nm-applet")
+		(f "org.keepassxc.KeePassXC")
+		(f ".blueman-manager-wrapped")
+		(f "virt-manager")
+		(f "org.fcitx.")
+		"workspace 7, title: Open File"
+      ];
     bind = [
         "$mod, F, exec, firefox"
         "$mod, Q, exec, $terminal"

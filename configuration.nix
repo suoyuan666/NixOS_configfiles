@@ -13,11 +13,30 @@
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  virtualisation = {
+    docker.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+	swtpm.enable = true;
+	ovmf = {
+          enable = true;
+	  packages = [(pkgs.OVMF.override {
+	    secureBoot = true;
+	    tpmSupport = true;
+          }).fd];
+        };
+      };
+    };
+  };
+ 
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Use the systemd-boot EFI boot loader.
   # boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.loader = {
     systemd-boot.enable = false;
@@ -29,20 +48,55 @@
     };
   };
 
+  boot.kernelParams = [
+    "nouveau.modeset=0"
+  ];
+
   zramSwap.enable = true;
   services.zram-generator.enable = true;
 
   hardware = {
+    pulseaudio.enable = false;
     opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        intel-media-driver
+        #nvidia-vaapi-driver
+	intel-media-driver
       ];
     };
-  };  
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+	  Experimental = true;
+	};
+	LinkKey = {
+	  Key = "968371C390186EDDED9A5A0BEEB5D1CF";
+	};
+      };
+    };
+    #nvidia = {
+    #modesetting.enable = true;
+    #  powerManagement.enable = false;
+    #  powerManagement.finegrained = false;
+    #  open = false;
+    #  nvidiaSettings = true;
+    #  package = config.boot.kernelPackages.nvidiaPackages.stable;
+    #};
+  };
 
+  # services.xserver = {
+  #  videoDrivers = ["intel"];
+  #  enable = true;
+  #  displayManager.sddm = {
+  #    enable = true;
+  #  };
+  #  # desktopManager.plasma5.enable = true;
+  #};
+  #services.desktopManager.plasma6.enable = true;
 
   networking.hostName = "OpenOS"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -58,12 +112,11 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [
         fcitx5-rime
-	      fcitx5-configtool
+	fcitx5-configtool
         fcitx5-gtk
     ];
   };
@@ -83,32 +136,35 @@
     liberation_ttf
     font-awesome
     hack-font
+    (nerdfonts.override { fonts = [ "Hack" ]; })
     intel-one-mono
+    wqy_zenhei
+    wqy_microhei
   ];
-
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zuos = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" ];
+    extraGroups = [ 
+      "wheel" "video" 
+      "docker" "libvirtd" 
+    ];
   };
 
-# List packages installed in system profile. To search, run:
+  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     neovim
     wget
+    ntfs3g
+    swaybg
     imv
     playerctl # be used for waybar MPRIS
     waybar
     wofi
-    swaybg
-    mako
     brightnessctl
+    pavucontrol
+    virt-manager
   ];
 
   security = {
@@ -118,6 +174,8 @@
       execWheelOnly = true;
     };
   };
+
+  programs.dconf.enable = true;
 
   services.pipewire = {
     enable = true;
@@ -129,13 +187,7 @@
   services.tlp.enable = true;
   services.v2raya.enable = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  services.blueman.enable = true;
 
   # List services that you want to enable:
 

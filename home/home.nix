@@ -9,6 +9,7 @@
     ./wofi.nix
     ./hyprland.nix
     ./theme.nix
+    ./hyprlock.nix
   ];
 
   home.packages = with pkgs;[
@@ -21,8 +22,11 @@
     xfce.thunar
     telegram-desktop
     amberol
+    flatpak
     firefox
+    yesplaymusic
     keepassxc
+    bitwarden
     (
       (brave.override {
         commandLineArgs = [
@@ -46,6 +50,10 @@
       "--enable-wayland-ime"
       "--ignore-gpu-blocklist"
     ];
+    package = pkgs.ungoogled-chromium;
+    extensions = [
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+    ];
   };
   
   
@@ -54,20 +62,21 @@
       enableExtensionUpdateCheck = false;
       enableUpdateCheck = false;
       extensions = with pkgs.vscode-extensions; [
-        yzhang.markdown-all-in-one
-        pkief.material-icon-theme
-        llvm-vs-code-extensions.vscode-clangd
-        vadimcn.vscode-lldb
-        usernamehw.errorlens
-        astro-build.astro-vscode
+	yzhang.markdown-all-in-one
+	pkief.material-icon-theme
+	llvm-vs-code-extensions.vscode-clangd
+	vadimcn.vscode-lldb
+	usernamehw.errorlens
+	astro-build.astro-vscode
+	bbenoist.nix
       ];
       userSettings = {
-        "window.titleBarStyle" = "custom";
-        "editor.fontFamily" = "Intel One Mono";
-        "editor.fontSize" = 17;
-        "telemetry.telemetryLevel" = "off";
-        "workbench.iconTheme" = "material-icon-theme";
-        "workbench.colorTheme" = "Quiet Light";
+         "window.titleBarStyle" = "custom";
+	 "editor.fontFamily" = "Intel One Mono";
+	 "editor.fontSize" = 17;
+	 "telemetry.telemetryLevel" = "off";
+	 "workbench.iconTheme" = "material-icon-theme";
+	 "workbench.colorTheme" = "Quiet Light";
       };
       package =
         (pkgs.vscodium.override
@@ -75,6 +84,7 @@
             commandLineArgs = [
               "--ozone-platform-hint=auto"
               "--ozone-platform=wayland"
+	      "--use-gl=egl"
               "--enable-wayland-ime"
             ];
           });
@@ -103,6 +113,14 @@
     enableCompletion = true;
   };
 
+  programs.kitty = {
+    enable = true;
+    font = {
+      name = "Hack Nerd Font Mono";
+      size = 14;
+    };
+  };
+ 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
