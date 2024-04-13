@@ -73,9 +73,6 @@
         General = {
 	  Experimental = true;
 	};
-	LinkKey = {
-	  Key = "968371C390186EDDED9A5A0BEEB5D1CF";
-	};
       };
     };
     #nvidia = {
