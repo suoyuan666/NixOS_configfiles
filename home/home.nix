@@ -5,11 +5,13 @@
   home.homeDirectory = "/home/zuos";
 
   imports = [
-    ./waybar.nix
-    ./wofi.nix
-    ./hyprland.nix
-    ./theme.nix
-    ./hyprlock.nix
+    # ./waybar.nix
+    # ./wofi.nix
+    # ./hyprland.nix
+    # ./theme.nix
+    # ./hyprlock.nix
+    ./develop.nix
+    ./daily.nix
   ];
 
   home.packages = with pkgs;[
@@ -17,14 +19,14 @@
     htop
     unzip
     p7zip
-    kitty
+    lsd
+    fd
+    ripgrep
     fastfetch
-    xfce.thunar
     telegram-desktop
     amberol
     flatpak
     firefox
-    yesplaymusic
     keepassxc
     bitwarden
     (
@@ -40,6 +42,8 @@
         # inherit (pkgs.guangtao-sources.brave) src pname version;
       })
     )
+    tela-icon-theme
+    netease-cloud-music-gtk
   ];
 
   programs.chromium = {
@@ -56,71 +60,6 @@
     ];
   };
   
-  
-  programs.vscode = {
-      enable = true;
-      enableExtensionUpdateCheck = false;
-      enableUpdateCheck = false;
-      extensions = with pkgs.vscode-extensions; [
-	yzhang.markdown-all-in-one
-	pkief.material-icon-theme
-	llvm-vs-code-extensions.vscode-clangd
-	vadimcn.vscode-lldb
-	usernamehw.errorlens
-	astro-build.astro-vscode
-	bbenoist.nix
-      ];
-      userSettings = {
-         "window.titleBarStyle" = "custom";
-	 "editor.fontFamily" = "Intel One Mono";
-	 "editor.fontSize" = 17;
-	 "telemetry.telemetryLevel" = "off";
-	 "workbench.iconTheme" = "material-icon-theme";
-	 "workbench.colorTheme" = "Quiet Light";
-      };
-      package =
-        (pkgs.vscodium.override
-          {
-            commandLineArgs = [
-              "--ozone-platform-hint=auto"
-              "--ozone-platform=wayland"
-	      "--use-gl=egl"
-              "--enable-wayland-ime"
-            ];
-          });
-   };
-
-
-
-  programs.git = {
-    enable = true;
-    userName = "suoyuan666";
-    userEmail = "107405806+suoyuan666@users.noreply.github.com";
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = {
-      add_newline = false;
-      aws.disabled = true;
-      gcloud.disabled = true;
-      line_break.disabled = true;
-    };
-  };
-
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-  };
-
-  programs.kitty = {
-    enable = true;
-    font = {
-      name = "Hack Nerd Font Mono";
-      size = 14;
-    };
-  };
- 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -129,8 +68,8 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "23.11";
 
   # Let Home Manager install and manage itself.
+  home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 }

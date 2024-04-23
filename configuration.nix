@@ -8,36 +8,10 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      #<nixpkgs/nixos/modules/profiles/hardened.nix>
     ];
 
-  nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  virtualisation = {
-    docker.enable = true;
-    libvirtd = {
-      enable = true;
-      qemu = {
-        package = pkgs.qemu_kvm;
-	swtpm.enable = true;
-	ovmf = {
-          enable = true;
-	  packages = [(pkgs.OVMF.override {
-	    secureBoot = true;
-	    tpmSupport = true;
-          }).fd];
-        };
-      };
-    };
-  };
- 
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Use the systemd-boot EFI boot loader.
-  # boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-
   boot.loader = {
     systemd-boot.enable = false;
     grub = {
@@ -48,12 +22,45 @@
     };
   };
 
+  systemd.coredump.enable = false;
+
+  zramSwap = {
+    enable = true;
+  };
+  services.zram-generator.enable = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [
     "nouveau.modeset=0"
   ];
 
-  zramSwap.enable = true;
-  services.zram-generator.enable = true;
+  nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  virtualisation = {
+    #docker.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    libvirtd = {
+      enable = true;
+      qemu = {
+        package = pkgs.qemu_kvm;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [(pkgs.OVMF.override {
+            secureBoot = true;
+            tpmSupport = true;
+          }).fd];
+        };
+      };
+    };
+  };
+  programs.virt-manager.enable = true;
+
 
   hardware = {
     pulseaudio.enable = false;
@@ -62,8 +69,8 @@
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        #nvidia-vaapi-driver
-	intel-media-driver
+        nvidia-vaapi-driver
+	#intel-media-driver
       ];
     };
     bluetooth = {
@@ -71,33 +78,20 @@
       powerOnBoot = true;
       settings = {
         General = {
-	  Experimental = true;
-	};
+          Experimental = true;
+        };
       };
     };
-    #nvidia = {
-    #modesetting.enable = true;
-    #  powerManagement.enable = false;
-    #  powerManagement.finegrained = false;
-    #  open = false;
-    #  nvidiaSettings = true;
-    #  package = config.boot.kernelPackages.nvidiaPackages.stable;
-    #};
+    nvidia = {
+     modesetting.enable = true;
+     powerManagement.enable = true;
+     open = false;
+     nvidiaSettings = true;
+     package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
   };
 
-  # services.xserver = {
-  #  videoDrivers = ["intel"];
-  #  enable = true;
-  #  displayManager.sddm = {
-  #    enable = true;
-  #  };
-  #  # desktopManager.plasma5.enable = true;
-  #};
-  #services.desktopManager.plasma6.enable = true;
-
   networking.hostName = "OpenOS"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
@@ -113,14 +107,14 @@
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [
         fcitx5-rime
-	fcitx5-configtool
+        fcitx5-configtool
         fcitx5-gtk
     ];
   };
 
   environment = {
     sessionVariables = { 
-      LIBVA_DRIVER_NAME = "iHD"; 
+      LIBVA_DRIVER_NAME = "nvidia";
       NIXOS_OZONE_WL = "1";
     };
     variables.EDITOR = "nvim";
@@ -139,29 +133,15 @@
     wqy_microhei
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.zuos = {
-    isNormalUser = true;
-    extraGroups = [ 
-      "wheel" "video" 
-      "docker" "libvirtd" 
-    ];
+  services.xserver = {
+    enable = true;
+    videoDrivers = ["nvidia"];
   };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-    ntfs3g
-    swaybg
-    imv
-    playerctl # be used for waybar MPRIS
-    waybar
-    wofi
-    brightnessctl
-    pavucontrol
-    virt-manager
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
+ 
+  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
+    plasma-browser-integration
   ];
 
   security = {
@@ -170,31 +150,43 @@
       enable = true;
       execWheelOnly = true;
     };
+    # chromiumSuidSandbox.enable = true;
   };
 
-  programs.dconf.enable = true;
-
-  services.pipewire = {
+   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
   };
 
-  services.tlp.enable = true;
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.zuos = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "video" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
+  };
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    neovim 
+    wget
+    git
+    curl
+    kdePackages.bluedevil
+    xwaylandvideobridge
+    podman-tui
+    podman-desktop
+  ];
+
   services.v2raya.enable = true;
 
-  services.blueman.enable = true;
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
+  # networking.firewall.allowedTCPPorts = [  ];
+  # networking.firewall.allowedUDPPorts = [  ];
   networking.firewall.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system

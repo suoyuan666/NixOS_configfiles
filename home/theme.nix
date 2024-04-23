@@ -19,7 +19,7 @@
 
     font = {
       name = "Noto Sans Mono";
-      size = 14;
+      size = 15;
     };
   };
 }
