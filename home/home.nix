@@ -70,6 +70,6 @@
   # changes in each release.
 
   # Let Home Manager install and manage itself.
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.11";
   programs.home-manager.enable = true;
 }

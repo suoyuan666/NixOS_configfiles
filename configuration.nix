@@ -70,7 +70,7 @@
       driSupport32Bit = true;
       extraPackages = with pkgs; [
         nvidia-vaapi-driver
-	#intel-media-driver
+        #intel-media-driver
       ];
     };
     bluetooth = {
@@ -137,13 +137,11 @@
     enable = true;
     videoDrivers = ["nvidia"];
   };
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
+  services.gnome.core-developer-tools.enable = false;
+  services.gnome.games.enable = false;
  
-  environment.plasma5.excludePackages = with pkgs.libsForQt5; [
-    plasma-browser-integration
-  ];
-
   security = {
     rtkit.enable = true;
     sudo = {
@@ -176,17 +174,15 @@
     wget
     git
     curl
-    kdePackages.bluedevil
-    xwaylandvideobridge
-    podman-tui
-    podman-desktop
+
+    gnomeExtensions.blur-my-shell
   ];
 
   services.v2raya.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [  ];
-  # networking.firewall.allowedUDPPorts = [  ];
+  networking.firewall.allowedTCPPorts = [  ];
+  networking.firewall.allowedUDPPorts = [  ];
   networking.firewall.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system

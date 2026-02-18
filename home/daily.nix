@@ -27,8 +27,4 @@
       uris = ["qemu:///system"];
     };
   };
-
-  programs.obs-studio = {
-    enable = true;
-  };
 }
