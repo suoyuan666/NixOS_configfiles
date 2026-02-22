@@ -1,7 +1,7 @@
 { config, lib, ... }:
 {
   networking.firewall = {
-    enable = false;
+    enable = true;
     allowedTCPPorts = [  ];
     allowedUDPPorts = [  ];
   };
