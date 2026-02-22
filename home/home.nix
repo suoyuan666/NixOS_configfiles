@@ -16,34 +16,15 @@
 
   home.packages = with pkgs;[
     zip
-    htop
     unzip
-    p7zip
     lsd
     fd
     ripgrep
     fastfetch
-    telegram-desktop
     amberol
     flatpak
-    firefox
     keepassxc
-    bitwarden
-    (
-      (brave.override {
-        commandLineArgs = [
-          "--enable-wayland-ime"
-          "--ozone-platform=wayland"
-          "--enable-features=UseOzonePlatform"
-          # "--use-gl=egl"
-        ];
-      }).overrideAttrs
-      (old: {
-        # inherit (pkgs.guangtao-sources.brave) src pname version;
-      })
-    )
     tela-icon-theme
-    netease-cloud-music-gtk
   ];
 
   programs.chromium = {

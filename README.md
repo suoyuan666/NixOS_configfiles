@@ -1,3 +1,7 @@
-这是我的NixOS的配置文件，目前我刚开始学习使用Flakes和home-manager声明配置文件，所以可能写的不是很好（
+## Nix OS 配置文件
 
-由于我使用的是Hyprland，所以Brave浏览器和vscodium都做了一些改动（主要就是附加`--enable-wayland-ime`）
+正在更新中...
+
+我计划好好使用 flake + home-manager 把我的配置文件重构一下，并且使用一些比较好的 feature，比如用 impermanence 将根目录用 tmpfs 挂载以及用 disko 声明我的硬盘分区结构
+
+我还计划把我之前的 dotfiles 都用 nix 声明一遍，这个还正在做。
