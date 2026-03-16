@@ -1,10 +1,11 @@
 { ... }: {
+  dconf.enable = true;
   dconf.settings = {
     "org/gnome/mutter" = {
       experimental-features = [ 
         "xwayland-native-scaling" 
         "scale-monitor-framebuffer" 
-        "triple-buffering"
+        "autoclose-xwayland"
       ];
     };
 

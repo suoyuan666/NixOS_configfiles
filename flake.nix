@@ -10,7 +10,6 @@
 
     disko.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    impermanence.inputs.nixpkgs.follows = "nixpkgs";
     nixvim.inputs.nixpkgs.follows       = "nixpkgs";
   };
 
@@ -22,8 +21,6 @@
           inherit inputs;
         };
         modules = [
-          disko.nixosModules.disko
-
           ./hardware-configuration.nix
           ./host/laptop/suoyuan/config.fix
 

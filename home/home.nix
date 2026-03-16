@@ -18,6 +18,7 @@
   home.packages = with pkgs;[
     zip
     unzip
+    fzf
     ripgrep
     fastfetch
     flatpak
@@ -33,11 +34,21 @@
       "--enable-wayland-ime"
       "--ignore-gpu-blocklist"
     ];
-    package = pkgs.ungoogled-chromium;
-    extensions = [
-      "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-    ];
   };
+
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      name = "Default";
+      isDefault = true;
+
+      extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+        ublock-origin
+        darkreader
+        simple-translate
+      ];
+    };
+  }
   
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -49,6 +60,6 @@
   # changes in each release.
 
   # Let Home Manager install and manage itself.
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
   programs.home-manager.enable = true;
 }
