@@ -1,14 +1,5 @@
 {
   disko.devices = {
-    nodev."/" = {
-      fsType = "tmpfs";
-      mountOptions = [
-        "size=4G"
-        "mode=755"
-        "nosuid"
-        "nodev"
-      ];
-    };
     disk.main = {
       device = "/dev/nvme0n1";
       type = "disk";
@@ -38,20 +29,26 @@
                 "--key-size 512"
                 "--pbkdf argon2id"
               ];
-              settings = {
-                allowDiscards = true;
-              };
+              settings.allowDiscards = true;
               content = {
                 type = "btrfs";
                 extraArgs = [ "-f" ];
                 subvolumes = {
-                  "/nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = [ "compress=zstd" "nodev" ];
+                  "@" = {
+                    mountpoint = "/";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
-                  "/persist" = {
-                    mountpoint = "/persist";
-                    mountOptions = [ "compress=zstd" ];
+                  "@home" = {
+                    mountpoint = "/home";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                  "@nix" = {
+                    mountpoint = "/nix";
+                    mountOptions = [ "compress=zstd" "noatime" "nodev" ];
+                  };
+                  "@log" = {
+                    mountpoint = "/var/log";
+                    mountOptions = [ "compress=zstd" "noatime" ];
                   };
                 };
               };

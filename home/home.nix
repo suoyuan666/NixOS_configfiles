@@ -17,11 +17,8 @@
   home.packages = with pkgs;[
     zip
     unzip
-    lsd
-    fd
     ripgrep
     fastfetch
-    amberol
     flatpak
     keepassxc
     tela-icon-theme

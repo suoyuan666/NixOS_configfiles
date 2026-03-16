@@ -5,19 +5,17 @@
     ./disk.nix
   ];
 
-  boot.kernelParams = [
-    "nouveau.modeset=0"
-  ];
-
   nixpkgs.config.allowUnfree = true;
 
   networking.hostName = "OpenOS";
 
   hardware.nvidia = {
     enabled = true;
+    modesetting.enable = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
     open = true;
     videoAcceleration = true; # default is true
+    nvidiaSettings = true;
     powerManagement.enable = true;
   };
 
@@ -25,9 +23,6 @@
     sessionVariables = { 
       LIBVA_DRIVER_NAME = "nvidia";
       NIXOS_OZONE_WL = "1";
-    };
-    persistence."/persist".users.zuos = {
-      directories = [ "Downloads" "Documents" ".ssh" ".config/nixpkgs" ];
     };
   };
 
@@ -60,9 +55,7 @@
       isNormalUser = true;
       extraGroups = [ "wheel" "video" "docker" "libvirtd" ];
       home = "/home/zuos";
-      hashedPasswordFile = "/persist/passwords/zuos";
     };
-    mutableUsers = false;
   };
 }
 

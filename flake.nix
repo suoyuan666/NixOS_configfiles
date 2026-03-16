@@ -6,7 +6,6 @@
 
     disko.url = "github:nix-community/disko";
     home-manager.url = "github:nix-community/home-manager";
-    impermanence.url = "github:nix-community/impermanence";
     nixvim.url       = "github:nix-community/nixvim";
 
     disko.inputs.nixpkgs.follows = "nixpkgs";
