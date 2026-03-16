@@ -66,14 +66,11 @@
     pulse.enable = true;
   };
 
-  users.users.zuosv = {
+  users.users.zuos = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
-    home = "/home/zuosv";
-    hashedPasswordFile = "/persist/passwords/zuosv";
+    home = "/home/zuos";
   };
-
-   users.mutableUsers = false;
 
   environment.systemPackages = with pkgs; [
     neovim 

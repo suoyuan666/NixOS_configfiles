@@ -12,6 +12,7 @@
     # ./hyprlock.nix
     ./develop.nix
     ./daily.nix
+    ./gnome.nix
   ];
 
   home.packages = with pkgs;[

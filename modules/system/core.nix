@@ -7,13 +7,9 @@
     systemd-boot.enable = true;
   };
 
-  networking.hostName = "OpenOS";
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Shanghai";
-
-  networking.proxy.default = "http://127.0.0.1:38761";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   environment.systemPackages = with pkgs; [
     neovim 

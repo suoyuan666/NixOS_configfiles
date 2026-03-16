@@ -30,11 +30,9 @@
           ./modules/system/core.nix
 
           ./modules/secuirty/hardened/kernel.nix
-          ./modules/secuirty/hardened/fs.nix
           ./modules/secuirty/network.nix
 
           ./modules/desktop/gnome.nix
-          ./modules/user/gnome.nix
 
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
