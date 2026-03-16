@@ -20,8 +20,6 @@
     wget
     git
     curl
-
-    gnomeExtensions.blur-my-shell
   ];
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -52,6 +50,4 @@
     wqy_zenhei
     wqy_microhei
   ];
-
-
 }
