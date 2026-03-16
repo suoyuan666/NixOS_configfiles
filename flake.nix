@@ -33,6 +33,9 @@
           ./modules/secuirty/hardened/fs.nix
           ./modules/secuirty/network.nix
 
+          ./modules/desktop/gnome.nix
+          ./modules/user/gnome.nix
+
           home-manager.nixosModules.home-manager {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
